@@ -1,124 +1,120 @@
-# 💻 Imersão Back-end Alura: API de Posts com MongoDB e Gemini
+# Node.js Post API with MongoDB & Gemini AI
 
-## ✨ Sobre o Projeto
+## ✨ Overview
 
-Este projeto é a implementação de uma API Back-end desenvolvida durante a **Imersão Back-end da Alura**. O objetivo principal é construir uma API robusta para gerenciamento de posts, com um diferencial de utilizar a Inteligência Artificial do Google (Gemini) para gerar descrições automáticas de imagens.
+This project is a back-end API developed during the **Alura Back-end Immersion**. The main goal is to build a robust API for managing posts, featuring a unique integration with Google's Artificial Intelligence (Gemini) to automatically generate descriptions for uploaded images.
 
-A API é capaz de lidar com a conexão a um banco de dados **MongoDB local** e gerenciar todas as operações CRUD (Criar, Ler, Atualizar, Deletar) para a coleção de posts.
+The API connects to a **local MongoDB** database and handles all CRUD (Create, Read, Update, Delete) operations for the posts collection.
 
----
+## 🛠️ Technologies
 
-## 🛠️ Tecnologias Utilizadas
+* **Node.js**: JavaScript runtime environment.
+* **Express**: Web framework for building the API.
+* **MongoDB**: NoSQL database used for data persistence.
+* **MongoDB Driver / Mongoose**: Library to interact with MongoDB.
+* **Multer**: Middleware for handling `multipart/form-data` (image uploads).
+* **dotenv**: For environment variable management.
+* **CORS**: To handle security policies and allow frontend access.
+* **Google Gemini API**: AI service used to generate text descriptions from images.
 
-* **Node.js**: Ambiente de execução JavaScript.
-* **Express**: Framework web para construção da API.
-* **MongoDB**: Banco de dados NoSQL utilizado para persistência de dados.
-* **Mongoose/Driver MongoDB**: Biblioteca para interagir com o MongoDB.
-* **Multer**: Middleware para tratamento de upload de arquivos (imagens).
-* **dotenv**: Para gerenciamento de variáveis de ambiente.
-* **CORS**: Para lidar com políticas de segurança e permitir acesso do frontend.
-* **Google Gemini API**: Serviço de IA usado para gerar descrições textuais das imagens.
+## ⚙️ Setup and Installation
 
----
+Follow the steps below to configure and run the project locally.
 
-## ⚙️ Configuração e Instalação
+### Prerequisites
 
-Siga os passos abaixo para configurar e rodar o projeto localmente.
+1. **Node.js and npm** installed.
+2. **MongoDB Server** installed and running locally (on the default port `27017`).
+3. A **Google Gemini API Key** (for the image description feature).
 
-### Pré-requisitos
-
-1.  **Node.js e npm** instalados.
-2.  **MongoDB Server** instalado e rodando localmente (na porta padrão `27017`).
-3.  Uma **API Key do Google Gemini** (para a funcionalidade de descrição de imagem).
-
-### 1. Clonar o Repositório
+### 1. Clone the Repository
 
 ```bash
-git clone <URL_DO_SEU_REPOSITORIO>
-cd Imersao-Backend-ALura
-````
+git clone https://github.com/Lorenzo-Zagallo/instalike-crud-api-js.git
+cd instalike-crud-api-js
+```
 
-### 2\. Instalar Dependências
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3\. Configurar Variáveis de Ambiente
+### 3. Configure Environment Variables
 
-Crie um arquivo chamado **`.env`** na raiz do projeto e adicione as seguintes variáveis:
+Create a file named **`.env`** in the root of the project and add the following variables:
 
 ```env
-# URL de conexão para o MongoDB Local (porta e nome do DB)
+# Connection string for Local MongoDB
 STRING_CONEXAO="mongodb://localhost:27017/server_imersao_alura"
 
-# Sua chave API do Google Gemini
-GEMINI_API_KEY="SUA_CHAVE_AQUI"
+# Your Google Gemini API Key
+GEMINI_API_KEY="YOUR_API_KEY_HERE"
 
-# Porta de execução do servidor Express (Ex: 3000)
+# Express server port (e.g., 3000)
 PORT=3000
 ```
 
-### 4\. Iniciar o Servidor
+### 4. Start the Server
 
 ```bash
 npm start
-# ou
-node seu_arquivo_principal.js
+# or
+node server.js
 ```
 
-O servidor estará rodando em `http://localhost:3000` (ou na porta definida em `PORT`).
+The server will be running at `http://localhost:3000` (or the port defined in your `.env` file).
 
------
+---
 
-## 🚀 Endpoints da API
+## 🚀 API Endpoints
 
-Você pode testar os endpoints usando ferramentas como Thunder Client (VS Code) ou Postman.
+You can test the endpoints using tools like Thunder Client (VS Code) or Postman.
 
-| Método | Endpoint | Descrição |
+| Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| **`GET`** | `/posts` | Lista todos os posts cadastrados no banco de dados. |
-| **`POST`**| `/posts` | Cria um novo post com dados JSON (útil para posts sem imagem). |
-| **`POST`**| `/upload` | Recebe uma imagem (`multipart/form-data`) e cria um post inicial. |
-| **`PUT`** | `/upload/:id` | Atualiza um post existente. Este é o endpoint que aciona o **Gemini** para ler a imagem e gerar a descrição. |
+| **`GET`** | `/posts` | Lists all posts stored in the database. |
+| **`POST`**| `/posts` | Creates a new post with JSON data (useful for text-only posts). |
+| **`POST`**| `/upload` | Receives an image (`multipart/form-data`) and creates an initial post. |
+| **`PUT`** | `/upload/:id` | Updates an existing post. This endpoint triggers **Gemini** to analyze the image and generate a description. |
 
-### Exemplo de Requisição
+### Request Example
 
-Para **criar o banco de dados e o primeiro post** (e verificar sua conexão local):
+To **create the database and the first post** (and verify your local connection):
 
-```
+```http
 POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
-    "descricao": "Post de teste inicial",
-    "imgUrl": "[https://via.placeholder.com/150](https://via.placeholder.com/150)",
+    "descricao": "Initial test post",
+    "imgUrl": "https://via.placeholder.com/150",
     "alt": "placeholder"
 }
 ```
 
------
+---
 
-## 🔗 Estrutura do Projeto
+## 🔗 Project Structure
 
-A estrutura segue o padrão MVC (Model-View-Controller) adaptado:
+The structure follows an adapted MVC (Model-View-Controller) pattern:
 
-```
-.
+```plaintext
+/
 ├── src/
 │   ├── config/
-│   │   └── dbconfig.js       # Gerencia a conexão com o MongoDB.
+│   │   └── dbconfig.js       # Manages the MongoDB connection
 │   ├── controllers/
-│   │   └── postsController.js  # Lógica de negócio e manipulação de requisições.
+│   │   └── postsController.js # Business logic and request handling
 │   ├── models/
-│   │   └── postsModel.js     # Interação direta com o banco de dados (funções CRUD).
+│   │   └── postsModel.js     # Direct database interaction (CRUD functions)
 │   ├── routes/
-│   │   └── postsRoutes.js    # Definição das rotas e middlewares (Multer, CORS).
+│   │   └── postsRoutes.js    # Route definitions and middlewares (Multer, CORS)
 │   ├── services/
-│   │   └── geminiService.js  # Lógica para comunicação com a API Gemini.
-│   └── app.js / server.js    # Arquivo principal que inicializa o Express.
-├── uploads/              # Diretório para armazenamento temporário e final das imagens.
-├── .env                  # Variáveis de ambiente (ignorado pelo git).
-├── package.json
-└── README.md
+│   │   └── geminiService.js  # Logic for communicating with the Gemini API
+│   └── server.js             # Main file that initializes Express
+├── uploads/                  # Directory for temporary and final image storage
+├── .env                      # Environment variables (ignored by git)
+├── package.json              # Project dependencies and scripts
+└── README.md                 # Project documentation
 ```
